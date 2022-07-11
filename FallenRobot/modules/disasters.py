@@ -460,7 +460,8 @@ def removetiger(update: Update, context: CallbackContext) -> str:
 @run_async
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
-    reply = "<b>Known Cooks 🧑‍🍳:</b>\n"
+    reply = "<b>Known Cooks 
+    🧑‍🍳:</b>\n"
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML
     )
@@ -539,7 +540,7 @@ def devlist(update: Update, context: CallbackContext):
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML
     )
     true_dev = list(set(DEV_USERS) - {OWNER_ID})
-    reply = "<b>Swordsmans ⚔:</b>\n"
+    reply = "<b>Swordsmen ⚔:</b>\n"
     for each_user in true_dev:
         user_id = int(each_user)
         try:
@@ -648,20 +649,20 @@ Group admins/group owners do not need these commands.
 Visit @{SUPPORT_CHAT} for more information.
 """
 
-SUDO_HANDLER = CommandHandler(("addsudo", "adddragon"), addsudo)
-SUPPORT_HANDLER = CommandHandler(("addsupport", "adddemon"), addsupport)
-TIGER_HANDLER = CommandHandler(("addtiger"), addtiger)
-WHITELIST_HANDLER = CommandHandler(("addwhitelist", "addwolf"), addwhitelist)
-UNSUDO_HANDLER = CommandHandler(("removesudo", "removedragon"), removesudo)
-UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removedemon"), removesupport)
-UNTIGER_HANDLER = CommandHandler(("removetiger"), removetiger)
-UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removewolf"), removewhitelist)
+SUDO_HANDLER = CommandHandler(("addsudo", "addnavigator"), addsudo)
+SUPPORT_HANDLER = CommandHandler(("addsupport", "addsniper"), addsupport)
+TIGER_HANDLER = CommandHandler(("adddoctor"), addtiger)
+WHITELIST_HANDLER = CommandHandler(("addwhitelist", "addcook"), addwhitelist)
+UNSUDO_HANDLER = CommandHandler(("removesudo", "removenavigator"), removesudo)
+UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removesniper"), removesupport)
+UNTIGER_HANDLER = CommandHandler(("removedoctor"), removetiger)
+UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removecook"), removewhitelist)
 
-WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "wolves"], whitelistlist)
-TIGERLIST_HANDLER = CommandHandler(["tigers"], tigerlist)
-SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "demons"], supportlist)
-SUDOLIST_HANDLER = CommandHandler(["sudolist", "dragons"], sudolist)
-DEVLIST_HANDLER = CommandHandler(["devlist", "heroes"], devlist)
+WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "cooks"], whitelistlist)
+TIGERLIST_HANDLER = CommandHandler(["doctors"], tigerlist)
+SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "snipers"], supportlist)
+SUDOLIST_HANDLER = CommandHandler(["sudolist", "navigators"], sudolist)
+DEVLIST_HANDLER = CommandHandler(["devlist", "swordsmen"], devlist)
 
 dispatcher.add_handler(SUDO_HANDLER)
 dispatcher.add_handler(SUPPORT_HANDLER)
