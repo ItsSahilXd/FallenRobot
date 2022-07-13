@@ -5,7 +5,7 @@ import requests
 
 class Bot(object):
 
-    BOT_URL = 'https://api.telegram.org/bot' + os.environ['BOT_TOKEN'] + '/'
+    BOT_URL = 'https://api.telegram.org/bot' + os.environ['TOKEN'] + '/'
 
     def __init__(self):
         self.parser = re.compile('^\/(?:(\S+)|)\s?([\s\S]*)$')
