@@ -1,100 +1,68 @@
+# Special Thanks @TeamDaisyX 
+
+import os
+import re
+
 import requests
+from bs4 import BeautifulSoup
+from telethon import events
+
+from FallenRobot import telethn as tbot
 
 
-class Books(object):
-    BASE_URL = \
-        'https://www.googleapis.com/books/v1/volumes?' \
-        'q="{}"&projection={}&printType={}&langRestrict={}&maxResults={}'
+@tbot.on(events.NewMessage(pattern="^/books (.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    lool = 0
+    KkK = await event.reply("Searching for the books....")
+    lin = "https://b-ok.cc/s/"
+    text = input_str
+    link = lin + text
 
-    MAX_RESULTS = 1
-    PRINT_TYPE = 'books'
-    PROJECTION = 'full'
-    LANGUAGE = 'en'
-
-    # SEARCH_FIELDS = {
-    #     "title": "intitle",
-    #     "author": "inauthor",
-    #     "publisher": "inpublisher",
-    #     "subject": "subject",
-    #     "isbn": "isbn",
-    # }
-
-    BOOK_FIELDS = [
-        'title',
-        'authors',
-        'categories',
-        'description',
-        'imageLinks'
+    headers = [
+        "User-Agent",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0",
     ]
+    page = requests.get(link)
+    soup = BeautifulSoup(page.content, "html.parser")
+    f = open("book.txt", "w")
+    total = soup.find(class_="totalCounter")
+    for nb in total.descendants:
+        nbx = nb.replace("(", "").replace(")", "")
+    if nbx == "0":
+        await event.reply("No Books Found with that name.")
+    else:
 
-    def __init__(self):
-        pass
+        for tr in soup.find_all("td"):
+            for td in tr.find_all("h3"):
+                for ts in td.find_all("a"):
+                    title = ts.get_text()
+                    lool = lool + 1
+                for ts in td.find_all("a", attrs={"href": re.compile("^/book/")}):
+                    ref = ts.get("href")
+                    link = "https://b-ok.cc" + ref
 
-    @staticmethod
-    def get_attribute(data, attribute, default_value):
-        return data.get(attribute) or default_value
+                f.write("\n" + title)
+                f.write("\nBook link:- " + link + "\n\n")
 
-    def process_search(self, data):
+        f.write("By @DarlingXRobor. 💫")
+        f.close()
+        caption = "A collabration with Friday.\n Join Support @Darling_Support"
 
-        book = {}
-
-        for field in self.BOOK_FIELDS:
-
-            book[field] = self.get_attribute(data, field, '')
-
-            if (field == 'authors') or (field == 'categories') and book[field] != '':
-                if len(book[field]) > 1:
-                    book[field] = ', '.join(book[field])
-                else:
-                    book[field] = book[field][0]
-
-            if field == 'imageLinks' and book[field] != '':
-                book[field] = self.get_attribute(book[field], 'thumbnail', '')
-
-        return book
-
-    def search(self, field, query):
-        """
-            Search book on Google Books API
-
-            Parameters
-            ----------
-                field
-                    Search field 
-
-                query
-                    Value to be searched
-
-            Returns
-            -------
-                JSON
-                    Search results in JSON format if successful, None o/w
-        """
-
-        if field == 'search':
-            url = self.BASE_URL.format(query.replace(' ', '+'),
-                                       self.PROJECTION,
-                                       self.PRINT_TYPE,
-                                       self.LANGUAGE,
-                                       self.MAX_RESULTS)
-        else:
-            return None
-
-        try:
-            response = requests.get(url)
-
-            if response.status_code == 200:
-
-                response_json = response.json()
-
-                if response_json['totalItems'] != 0:
-                    return self.process_search(response_json['items'][0]['volumeInfo'])
-                else:
-                    return None
-
-        except requests.exceptions.RequestException as e:
-            print(e)
-            return None
+        await tbot.send_file(
+            event.chat_id,
+            "book.txt",
+            caption=f"**BOOKS GATHERED SUCCESSFULLY!\n\nBY @DarlingXRobot.**💫",
+        )
+        os.remove("book.txt")
+        await KkK.delete()
 
 
-
+__help__ = """
+<b> Book </b>
+<b>Available commands:</b>
+ - /books book name : Usage :Gets Instant Download Link Of Given Book.
+"""
+__mod_name__ = "Books"
