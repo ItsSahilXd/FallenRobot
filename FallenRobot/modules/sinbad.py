@@ -1,5 +1,5 @@
-from books import Books
-from bot import Bot
+from FallenRobot.modules.books import Books
+from FallenRobot.modules.bot import Bot
 
 books = Books()
 bot = Bot()
